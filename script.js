@@ -1672,7 +1672,7 @@ const badges = [
 const defaultState = {
   xp:0, stars:0, streak:0, lastStudyDate:"",
   learned:[], quiz:{total:0, correct:0}, combo:0, bestCombo:0,
-  matchedPairs:0, todayLearned:0, todayQuiz:0, todayDate:"", sound:true, voice:true
+  matchedPairs:0, todayLearned:0, todayQuiz:0, todayDate:"", sound:true, voice:true, playSource:"learned", voice:true, playSource:"learned"
 };
 
 let state = loadState();
@@ -1793,8 +1793,8 @@ function speakNameSymbol(el, prefix = "") {
   if (!el) return;
   const symbolText = getSymbolSpeech(el.s);
   const text = prefix
-    ? `${prefix}, ${el.ko}. 원소기호는 ${symbolText}.`
-    : `${el.ko}. 원소기호는 ${symbolText}.`;
+    ? `${prefix}, ${el.ko}, 원자번호 ${el.n}번, 원소기호는 ${symbolText}.`
+    : `${el.ko}, 원자번호 ${el.n}번, 원소기호는 ${symbolText}.`;
   speakShort(text);
 }
 
@@ -1887,13 +1887,8 @@ function renderTable() {
 }
 
 function renderElementPanel() {
-  const big = document.getElementById("bigElement");
-  big.className = `big-element ${catClass(selected.cat)}`;
-  big.innerHTML = `<strong>${selected.s}</strong><span>${selected.n}</span>`;
   document.getElementById("elementImage").src = selected.image;
   document.getElementById("elementImage").alt = `${selected.ko} 원소 이미지`;
-  document.getElementById("elementName").textContent = selected.ko;
-  document.getElementById("elementEnglish").textContent = selected.en;
   document.getElementById("elementNumber").textContent = selected.n;
   document.getElementById("elementSymbol").textContent = selected.s;
   document.getElementById("elementCategory").textContent = selected.cat;
@@ -1997,11 +1992,29 @@ function normalizeAnswer(value) {
 }
 
 function createPlayQuestion() {
-  const learnedElements = state.learned.length >= 6
-    ? elements.filter(el => state.learned.includes(el.n))
-    : elements;
+  const source = state.playSource || "learned";
+  const learnedElements = elements.filter(el => state.learned.includes(el.n));
+  let pool = source === "learned" ? learnedElements : elements;
 
-  const target = learnedElements[Math.floor(Math.random() * learnedElements.length)];
+  if (source === "learned" && pool.length === 0) {
+    return {
+      mode: playMode,
+      elementNumber: null,
+      answer: "",
+      type: "empty",
+      label: "학습 필요",
+      html: `
+        <div class="question-label">아직 학습한 원소가 없어요.</div>
+        <div class="empty-play">
+          <strong>학습 탭에서 원소를 선택한 뒤<br>'이 원소 배웠어요'를 눌러 주세요.</strong>
+          <p>또는 출제 범위를 <b>전체 118개 랜덤</b>으로 바꾸면 바로 놀이를 시작할 수 있어요.</p>
+        </div>
+      `,
+      placeholder: "먼저 학습한 원소를 만들어 주세요."
+    };
+  }
+
+  const target = pool[Math.floor(Math.random() * pool.length)];
 
   if (playMode === "symbol") {
     return {
@@ -2051,6 +2064,7 @@ function createPlayQuestion() {
 }
 
 function renderPlayQuestion() {
+  renderPlaySourceButtons();
   if (!currentPlay || currentPlay.mode !== playMode) {
     currentPlay = createPlayQuestion();
   }
@@ -2074,8 +2088,13 @@ function checkPlayAnswer() {
 
   const user = normalizeAnswer(document.getElementById("playAnswerInput").value);
   const answer = normalizeAnswer(currentPlay.answer);
-  const target = elements.find(el => el.n === currentPlay.elementNumber);
+  const target = currentPlay.elementNumber ? elements.find(el => el.n === currentPlay.elementNumber) : null;
   const feedback = document.getElementById("playFeedback");
+
+  if (!currentPlay.elementNumber) {
+    feedback.textContent = "학습한 원소가 없어요. 학습 탭에서 먼저 원소를 배워 주세요.";
+    return;
+  }
 
   if (!user) {
     feedback.textContent = "정답을 입력해 주세요.";
@@ -2121,6 +2140,19 @@ function setPlayMode(mode) {
   document.querySelectorAll(".play-mode").forEach(btn => {
     btn.classList.toggle("active", btn.dataset.mode === mode);
   });
+  makePlayQuestion();
+}
+
+function renderPlaySourceButtons() {
+  document.querySelectorAll(".source-btn").forEach(btn => {
+    btn.classList.toggle("active", btn.dataset.source === (state.playSource || "learned"));
+  });
+}
+
+function setPlaySource(source) {
+  state.playSource = source;
+  renderPlaySourceButtons();
+  saveState();
   makePlayQuestion();
 }
 

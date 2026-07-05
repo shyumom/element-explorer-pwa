@@ -1,4 +1,4 @@
-const CACHE_NAME = "element-explorer-pwa-v9-right-panel-scroll";
+const CACHE_NAME = "element-explorer-pwa-v10-final-cleanup-source-toggle";
 const ASSETS = [
   "./",
   "./index.html",

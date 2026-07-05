@@ -62,10 +62,8 @@
         </section>
 
         <aside class="card element-panel">
+
           <div class="visual-card"><img id="elementImage" src="" alt="원소 이미지" /></div>
-          <div class="big-element" id="bigElement"></div>
-          <h3 id="elementName"></h3>
-          <p class="english" id="elementEnglish"></p>
 
           <dl class="info-list">
             <div><dt>원자번호</dt><dd id="elementNumber"></dd></div>
@@ -85,7 +83,7 @@
             <p id="elementFact"></p>
           </div>
 
-          <button id="speakElementButton" class="voice-button">🗣️ 이름·기호 듣기</button>
+          <button id="speakElementButton" class="voice-button">🗣️ 이름·번호·기호 듣기</button>
           <button id="learnButton" class="primary">이 원소 배웠어요 +20XP</button>
         </aside>
       </div>
@@ -153,6 +151,14 @@
           <div class="play-mode-tabs">
             <button class="play-mode active" data-mode="symbol">✏️ 원소기호 맞추기</button>
             <button class="play-mode" data-mode="name">🔎 원소 이름 맞추기</button>
+          </div>
+
+          <div class="play-source-box">
+            <div class="source-title">출제 범위</div>
+            <div id="playSourceButtons" class="source-buttons">
+              <button class="source-btn active" data-source="learned">학습한 원소만</button>
+              <button class="source-btn" data-source="all">전체 118개 랜덤</button>
+            </div>
           </div>
 
           <div id="playQuestionBox" class="input-question"></div>
