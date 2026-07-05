@@ -1,4 +1,4 @@
-const CACHE_NAME = "element-explorer-pwa-v7-short-voice";
+const CACHE_NAME = "element-explorer-pwa-v9-right-panel-scroll";
 const ASSETS = [
   "./",
   "./index.html",

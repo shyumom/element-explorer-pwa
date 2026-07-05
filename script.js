@@ -2098,17 +2098,16 @@ function checkPlayAnswer() {
     if (state.combo > 0 && state.combo % 3 === 0) {
       addXp(30);
       playSound("badge");
-      feedback.textContent = `정답! ${currentPlay.answer} 맞아요. 3연속 정답 보너스까지 +70XP!`;
+      feedback.textContent = `정답! ${currentPlay.answer} 맞아요. 정답 듣기 버튼으로 이름과 기호를 들을 수 있어요. 3연속 정답 보너스까지 +70XP!`;
     } else {
       playSound("correct");
-      feedback.textContent = `정답! ${currentPlay.answer} 맞아요. +40XP`;
+      feedback.textContent = `정답! ${currentPlay.answer} 맞아요. 정답 듣기 버튼으로 이름과 기호를 들을 수 있어요. +40XP`;
     }
 
     showAnswerVoiceButton("speakPlayAnswerButton", target);
     document.querySelector(".play-card").classList.add("celebrate");
     setTimeout(() => document.querySelector(".play-card").classList.remove("celebrate"), 360);
     saveState();
-    setTimeout(makePlayQuestion, 900);
   } else {
     state.combo = 0;
     playSound("wrong");

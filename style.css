@@ -264,7 +264,7 @@ h1 { font-size:42px; line-height:1; color:var(--deep); letter-spacing:-1.5px; }
   .element-panel {
     gap: 8px;
     max-height: 640px;
-    overflow: hidden;
+    overflow-y: auto;
   }
 
   .visual-card {
@@ -718,5 +718,59 @@ h1 { font-size:42px; line-height:1; color:var(--deep); letter-spacing:-1.5px; }
   .voice-button {
     padding: 11px 14px;
     font-size: 16px;
+  }
+}
+
+
+.play-card #speakPlayAnswerButton {
+  margin-top: 8px;
+  background: linear-gradient(135deg, #eef8ff, #fff6d6);
+  border: 2px solid #b8dcff;
+}
+
+.play-card #speakPlayAnswerButton:not(.hidden) {
+  display: block;
+}
+
+
+/* Learning tab right panel scroll fix */
+.element-panel {
+  max-height: calc(100vh - 190px);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+  padding-right: 12px;
+}
+
+.element-panel::-webkit-scrollbar {
+  width: 8px;
+}
+
+.element-panel::-webkit-scrollbar-track {
+  background: #eef6ff;
+  border-radius: 999px;
+}
+
+.element-panel::-webkit-scrollbar-thumb {
+  background: #9cc9ff;
+  border-radius: 999px;
+}
+
+.element-panel::-webkit-scrollbar-thumb:hover {
+  background: #6aaeff;
+}
+
+@media (min-width: 901px) {
+  .element-panel {
+    max-height: calc(820px - 180px);
+    overflow-y: auto !important;
+  }
+}
+
+@media (max-width: 900px) {
+  .element-panel {
+    max-height: none;
+    overflow-y: visible;
+    padding-right: 18px;
   }
 }
